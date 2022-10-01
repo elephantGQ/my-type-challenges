@@ -10,16 +10,14 @@ type cases = [
 ];
 
 // ============= Your Code Here =============
-type ResArr<T, S extends any[] = []> = T extends [infer L,...infer R]
-  ? ResArr<R, [L,...S]>
-  : S;
-type IndexOf<T extends any[], U, C extends 1[] = []> = T extends [
-  infer F,
-  ...infer R
-]
-  ? Equal<F, U> extends true
-    ? T['length'] - C["length"]
-    : IndexOf<R, U, [...C, 1]>
-  : -1;
 
-type LastIndexOf<T, U> = IndexOf<ResArr<T>, U>;
+type LastIndexOf<
+  T extends any[],
+  U,
+  Res = -1,
+  Trr extends 1[] = []
+> = T extends [infer F, ...infer R]
+  ? Equal<F, U> extends true
+    ? LastIndexOf<R, U, Trr["length"], [...Trr, 1]>
+    : LastIndexOf<R, U, Res, [...Trr, 1]>
+  : Res;
