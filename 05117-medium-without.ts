@@ -1,5 +1,5 @@
 // ============= Test Cases =============
-import type { Equal, Expect } from "./test-utils";
+import type { Equal, Expect } from './test-utils';
 
 type cases = [
   Expect<Equal<Without<[1, 2], 1>, [2]>>,
@@ -8,8 +8,15 @@ type cases = [
 ];
 
 type TT = Without<[1, 2], 1>;
-// ============= Your Code Here =============
-// type Without<T, U, J extends any[] = []> = T extends [infer L, ...infer R]
-//   ? Without<R, U, [L] extends U ? J : [...J, L]>
-//   : J;
 
+type GetType<T> = T extends any[] ? T[number] : T;
+
+// ============= Your Code Here =============
+type Without<
+  T extends any[],
+  U,
+  TT = GetType<U>,
+  J extends any[] = []
+> = T extends [infer L, ...infer R]
+  ? Without<R, U, TT, L extends TT ? J : [...J, L]>
+  : J;
